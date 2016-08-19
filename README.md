@@ -18,7 +18,7 @@ A web application that uses the ```data-table``` HTML 5 web component that can b
 - Run ```bower install``` in the ```public``` directory to install the required dependencies. 
 - Edit the ```public/js/config.js``` with the correct details for your BaasBox server.
 - Open the ```public/index.html``` in your browser
-- Click the *Organizations* link and play with the tool to see how it works
+- Login, then play with the tool to see how it works
 
 The code for the Organizations tool is in ```public/activities/organizations/organizations.html```
 
@@ -44,9 +44,7 @@ The BaasBox server credentials are read from a global ```config.baasbox``` varia
 window.config = {
    'baasbox': {
       'url': 'http://localhost:9000',
-      'appcode': '1234567890',
-      'username': 'admin',
-      'password': 'admin'
+      'appcode': '1234567890'
    }
 }
 ```
@@ -95,18 +93,18 @@ Attributes that the ```data-table``` element accepts:
 - ```orderBy```: the orderBy clause for the BaasBox query, e.g. ```orderBy="name desc"```
 - ```actions```: space-separated list of actions for each item, e.g. ```actions="Action1 Action2"```. These appear as buttons on each row.
 - ```onAction```: a javascript function to call when an action button is clicked. The function is passed the action name (string) and the model object as parameters.
+- ```modelInit```: a javascript function to call when a model is created or edited. The model is passed as the first parameter. This allows you to initialize the model correctly.
 
 # Development
 
 In order to create more admin pages for the documents in your BaasBox server:
 
 - Add a new activity in the ```public/activities/``` directory (copy & paste the organizations one)
-- Add links to the activity in ```public/templates/navbar_main``` and ```public/activities/default/default.html```
+- Add links to the activity in ```public/templates/navbar_main```
 
 # Known Issues
 
 - Tested in Firefox only!
-- No login form, the credentials are hard-coded into the *config.js* file
 
  [webapp_skeleton]: https://github.com/tobykurien/webapp_skeleton
  [Polymer]: http://www.polymer-project.org/

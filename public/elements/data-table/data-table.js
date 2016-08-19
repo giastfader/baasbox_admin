@@ -17,6 +17,7 @@ Polymer({
 	actions : "",
 	operations : [],
 	onAction : "",
+	modelInit : "",
 
 	// Called when component is ready to render
 	ready : function() {
@@ -39,14 +40,10 @@ Polymer({
 			this.operations = []
 		}
 		
+		// this will be taken care of my login tag
 		BaasBox.setEndPoint(config.baasbox.url);
 		BaasBox.appcode = config.baasbox.appcode;
-		BaasBox.login(config.baasbox.username, config.baasbox.password).done(function(user) {
-			scope.loadData(0);
-		}).fail(function(err) {
-			alert("Failed to login to Baasbox");
-			console.log("error logging into baasbox", err.statusText);
-		});
+		scope.loadData(0);
 	},
 
 	// Called to load the edit form for "add new" or "edit" operations
@@ -65,14 +62,29 @@ Polymer({
 
 	// Called when "edit" button is clicked
 	edit : function(e, detail, sender) {
-		var m = e.target.templateInstance.model.m;
-		this.m = m;
+		this.m = e.target.templateInstance.model.m;
+		
+		if (this.modelInit && this.modelInit.trim().length > 0) {
+			var fn = window[this.modelInit];
+			if (fn && typeof fn === 'function') {
+				fn(this.m);
+			}
+		}
+
 		this.loadForm();
 	},
 
 	// called when "add new" is clicked
 	create : function() {
 		this.m = {};
+
+		if (this.modelInit && this.modelInit.trim().length > 0) {
+			var fn = window[this.modelInit];
+			if (fn && typeof fn === 'function') {
+				fn(this.m);
+			}
+		}
+		
 		this.loadForm();
 	},
 
@@ -162,8 +174,8 @@ Polymer({
 		var scope = this;
 		var m = e.target.templateInstance.model.m;
 
-		if (confirm("Are you sure?") && m.id > 0) {
-			Baasbox.deleteObject(m.id, this.model).done(function(res) {
+		if (m.id != null && confirm("Are you sure?")) {
+			BaasBox.deleteObject(m.id, scope.model).done(function(res) {
 				scope.loadData();
 			}).fail(function(error) {
 				alert(error.statusText);
